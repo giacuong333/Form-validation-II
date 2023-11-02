@@ -1,4 +1,6 @@
-function Validator(formSelector, options = {}) {
+function Validator(formSelector) {
+  var _this = this;
+
   // Get name as a key and rule as a value
   var formRules = {};
 
@@ -68,10 +70,13 @@ function Validator(formSelector, options = {}) {
       var rules = formRules[event.target.name];
       var errorMessage;
 
-      rules.find((rule) => {
+      for (var rule of rules) {
         errorMessage = rule(event.target.value);
-        return errorMessage;
-      });
+
+        if (errorMessage) {
+          break;
+        }
+      }
 
       // If there are errors -> display error message
       if (errorMessage) {
@@ -95,6 +100,7 @@ function Validator(formSelector, options = {}) {
       }
     }
   }
+  console.log(this);
 
   // Handle the submit behavior
   formElement.onsubmit = function (event) {
@@ -111,7 +117,7 @@ function Validator(formSelector, options = {}) {
 
     // When there is no error -> submit form
     if (isValid) {
-      if (typeof options.onSubmit === "function") {
+      if (typeof _this.onSubmit === "function") {
         var enableInputs = formElement.querySelectorAll("[name]:not([disabled])");
         var formValues = Array.from(enableInputs).reduce((value, input) => {
           switch (input.type) {
@@ -140,7 +146,7 @@ function Validator(formSelector, options = {}) {
           }
           return value;
         }, {});
-        options.onSubmit(formValues);
+        _this.onSubmit(formValues);
       } else {
         formElement.submit();
       }

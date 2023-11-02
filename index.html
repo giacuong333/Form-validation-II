@@ -32,11 +32,10 @@
     </div>
     <script src="./main.js"></script>
     <script>
-      Validator("#login-form", {
-        onSubmit: function (data) {
-          console.log(data);
-        },
-      });
+      var form = new Validator("#login-form");
+      form.onSubmit = function (formData) {
+        console.log(formData);
+      };
     </script>
   </body>
 </html>
